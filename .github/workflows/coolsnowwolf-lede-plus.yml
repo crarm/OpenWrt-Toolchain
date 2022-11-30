@@ -8,7 +8,13 @@
 
 name: Coolsnowwolf/Lede Example
 on:
+  repository_dispatch:
   workflow_dispatch:
+    inputs:
+      ssh:
+        description: 'SSH connection to Actions'
+        required: false
+        default: 'true'
 #  schedule:
 #    - cron: 0 18 * * *
 #  watch:
@@ -60,17 +66,66 @@ jobs:
           git pull
           ./scripts/feeds update -a
           ./scripts/feeds install -a
+          ./scripts/feeds install -a
 
-      - name: Download Packages
-        id: download
+      - name: Import external feeds - sirpdboy-package...
+        working-directory: ./openwrt
         run: |
-          mv -f $CONFIG_FILE $OPENWRTROOT/.config
-          cd $OPENWRTROOT
-          make defconfig
-          make download -j16
+          git clone  https://github.com/kenzok8/openwrt-packages.git package/kenzo
+          git clone https://github.com/sirpdboy/sirpdboy-package package/sirpdboy
+          mkdir package/crarm
+          cp -r package/kenzo/luci-app-argonne-config package/crarm/luci-app-argonne-config
+          cp -r package/kenzo/luci-app-ikoolproxy package/crarm/luci-app-ikoolproxy
+          cp -r package/kenzo/luci-app-koolproxyR package/crarm/luci-app-koolproxyR
+          cp -r package/kenzo/luci-theme-argon package/crarm/luci-theme-argon
+          cp -r package/kenzo/luci-theme-argonne package/crarm/luci-theme-argonne
+          cp -r package/kenzo/luci-theme-atmaterial_new package/crarm/luci-theme-atmaterial_new
+          cp -r package/kenzo/luci-theme-ifit package/crarm/luci-theme-ifit
+          cp -r package/kenzo/luci-theme-mcat package/crarm/luci-theme-mcat
+          cp -r package/kenzo/luci-theme-neobird package/crarm/luci-theme-neobird
+          cp -r package/kenzo/luci-theme-opentopd package/crarm/luci-theme-opentopd
+          cp -r package/kenzo/luci-theme-tomato package/crarm/luci-theme-tomato
+          cp -r package/sirpdboy/luci-app-poweroffdevice package/crarm/luci-app-poweroffdevice
+          cp -r package/sirpdboy/luci-app-rebootschedule package/crarm/luci-app-rebootschedule
+          cp -r package/sirpdboy/luci-app-switch-lan-play package/crarm/luci-app-switch-lan-play
+          cp -r package/sirpdboy/switch-lan-play package/crarm/switch-lan-play
+          cp -r package/sirpdboy/luci-theme-btmod package/crarm/luci-theme-btmod
+          cp -r package/sirpdboy/luci-theme-opentomato package/crarm/luci-theme-opentomato
+          cp -r package/sirpdboy/luci-theme-opentomcat package/crarm/luci-theme-opentomcat
+          rm -rf package/kenzo
+          rm -rf package/sirpdboy
+        
+      - name: Configuration Customization - Build_x86_64
+        run: |
+          [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
+          chmod +x ./customize.sh && ./customize.sh
+          cd openwrt && make defconfig
+          
+      - name: SSH connection to Actions
+        uses: P3TERX/ssh2actions@v1.0.0
+        if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
+        env:
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      
+      - name: make diffconfig
+        working-directory: ./openwrt
+        run: |
+          ./scripts/diffconfig.sh > diffconfig
+      
+      - name : Upload diffconfig
+        uses: actions/upload-artifact@master
+        with:
+          name: config
+          path: openwrt/diffconfig
+      
+      - name: Download package
+        working-directory: ./openwrt
+        run: |
+          make download -j$(nproc)
           find dl -size -1024c -exec ls -l {} \;
           find dl -size -1024c -exec rm -f {} \;
-
+        
       - name: Compile Firmware
         id: compile
         run: |
@@ -85,17 +140,8 @@ jobs:
           make target/install -j$(nproc) || make target/install -j1 V=s
           make checksum
 
-      - name: Organize Files
-        id: organize
-        run: |
-          cd openwrt/bin/targets/*/*
-          rm -rf packages
-          echo "FIRMWARE=$PWD" >> $GITHUB_ENV
-          df -hT $PWD
-
-      - name: Upload Firmware To Artifact
-        id: upload
-        uses: actions/upload-artifact@main
+      - name : Upload artifact
+        uses: actions/upload-artifact@master
         with:
-          name: OpenWrt-Firmware
-          path: ${{ env.FIRMWARE }}
+          name: OpenWrt
+          path: openwrt/bin

@@ -23,7 +23,7 @@ on:
 env:
   TOOLCHAIN_TAG: coolsnowwolf-lede-master
   TOOLCHAIN_NAME: toolchain-image-coolsnowwolf-lede-master-x86-64.img
-  TOOLCHAIN_URL: https://github.com/crarm/OpenWrt-Toolchain/releases/download/$TOOLCHAIN_TAG/$TOOLCHAIN_NAME
+  #TOOLCHAIN_URL: https://github.com/crarm/OpenWrt-Toolchain/releases/download/$TOOLCHAIN_TAG/$TOOLCHAIN_NAME
   CONFIG_FILE: config/x86/64_plus.config
   TZ: Asia/Shanghai
 
@@ -39,11 +39,30 @@ jobs:
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
-          sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
-          sudo -E apt-get -qq update
-          sudo -E apt-get -qq install build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch python3 python2.7 unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs git-core gcc-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler g++-multilib antlr3 gperf wget curl swig rsync
-          sudo -E apt-get -qq autoremove --purge
-          sudo -E apt-get -qq clean
+          set +e
+          docker rmi `docker images -q`
+          echo "Deleting files, please wait ..."
+          sudo rm -rf \
+            /usr/share/dotnet \
+            /etc/mysql \
+            /etc/php
+          sudo -E apt-get -y purge \
+            azure-cli \
+            ghc* \
+            zulu* \
+            hhvm \
+            llvm* \
+            firefox \
+            google* \
+            dotnet* \
+            powershell \
+            openjdk* \
+            mysql* \
+            php*
+          sudo -E apt-get update
+          sudo -E apt-get -y install build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch python3 python2.7 unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs git-core gcc-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler g++-multilib antlr3 gperf wget curl swig rsync
+          sudo -E apt-get -y autoremove --purge
+          sudo -E apt-get clean
           sudo ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 
       - name: Prepare Toolchain Image
@@ -64,7 +83,7 @@ jobs:
           cd openwrt
           echo "OPENWRTROOT=$PWD" >> $GITHUB_ENV
           git pull
-          echo "src-git kiddin9 https://github.com/kiddin9/openwrt-packages.git" >> ./feeds.conf.default
+          #echo "src-git kiddin9 https://github.com/kiddin9/openwrt-packages.git" >> ./feeds.conf.default
           ./scripts/feeds update -a
           ./scripts/feeds install -a
           ./scripts/feeds install -a
@@ -74,7 +93,7 @@ jobs:
         run: |
           git clone  https://github.com/kenzok8/openwrt-packages.git package/kenzo
           git clone https://github.com/sirpdboy/sirpdboy-package package/sirpdboy
-          mkdir package/crarm
+          #mkdir package/crarm
           cp -r package/kenzo/luci-app-argonne-config package/crarm/luci-app-argonne-config
           cp -r package/kenzo/luci-app-ikoolproxy package/crarm/luci-app-ikoolproxy
           cp -r package/kenzo/luci-app-koolproxyR package/crarm/luci-app-koolproxyR

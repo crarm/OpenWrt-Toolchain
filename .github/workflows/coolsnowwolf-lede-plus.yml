@@ -85,7 +85,7 @@ jobs:
           git pull
           #echo "src-git kiddin9 https://github.com/kiddin9/openwrt-packages.git" >> ./feeds.conf.default
           ./scripts/feeds update -a
-          cd feeds/luci/applications/
+          cd feeds/luci/applications
           rm -rf luci-app-accesscontrol luci-app-acme luci-app-adbyby-plus luci-app-airplay2 luci-app-aliyundrive-fuse luci-app-aliyundrive-webdav luci-app-amule \
             luci-app-argon-config luci-app-aria2 luci-app-arpbind luci-app-attendedsysupgrade luci-app-autoreboot luci-app-baidupcs-web luci-app-cifs-mount \
             luci-app-cpufreq luci-app-dawn luci-app-ddns luci-app-diskman luci-app-dnsforwarder luci-app-docker luci-app-dockerman luci-app-dump1090 \
@@ -97,7 +97,7 @@ jobs:
             luci-app-shadowsocks-libev luci-app-socat luci-app-softethervpn luci-app-squid luci-app-ssrserver-python luci-app-syncdial luci-app-transmission \
             luci-app-turboacc luci-app-udpxy luci-app-unblockmusic luci-app-unbound luci-app-upnp luci-app-usb-printer luci-app-uugamebooster luci-app-v2ray-server \
             luci-app-verysync luci-app-vlmcsd luci-app-vsftpd luci-app-watchcat luci-app-webadmin luci-app-webdav luci-app-wrtbwmon luci-app-xlnetacc luci-app-zerotier  
-          cd $OPENWRTROOT/feeds/kiddin9/
+          cd $OPENWRTROOT/feeds/kiddin9
           rm -rf luci-app-acme luci-app-aliddns luci-app-apinger luci-app-bitsrunlogin-go luci-app-keepalived luci-app-lorawan-basicstation luci-app-oscam luci-app-unblockneteasemusic luci-app-unblockneteasemusic-go
           cd $OPENWRTROOT
           ./scripts/feeds install -a

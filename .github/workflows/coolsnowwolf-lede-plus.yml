@@ -17,6 +17,8 @@ on:
 env:
   TOOLCHAIN_TAG: coolsnowwolf-lede-master
   TOOLCHAIN_NAME: toolchain-image-coolsnowwolf-lede-master-x86-64.img
+  TOOLCHAIN_URL: https://github.com/crarm/OpenWrt-Toolchain/releases/download/$TOOLCHAIN_TAG/$TOOLCHAIN_NAME
+  CONFIG_FILE: config/x86/64_plus.config
   TZ: Asia/Shanghai
 
 jobs:
@@ -33,7 +35,7 @@ jobs:
         run: |
           sudo rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /usr/local/lib/android /opt/ghc
           sudo -E apt-get -qq update
-          sudo -E apt-get -qq install $(curl -fsSL git.io/depends-ubuntu-1804)
+          sudo -E apt-get -qq install build-essential asciidoc binutils bzip2 gawk gettext git libncurses5-dev libz-dev patch python3 python2.7 unzip zlib1g-dev lib32gcc1 libc6-dev-i386 subversion flex uglifyjs git-core gcc-multilib p7zip p7zip-full msmtp libssl-dev texinfo libglib2.0-dev xmlto qemu-utils upx libelf-dev autoconf automake libtool autopoint device-tree-compiler g++-multilib antlr3 gperf wget curl swig rsync
           sudo -E apt-get -qq autoremove --purge
           sudo -E apt-get -qq clean
           sudo ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
@@ -45,7 +47,7 @@ jobs:
           sudo swapoff -a
           sudo chown -R runner:runner /mnt
           sudo rm -f /mnt/swapfile
-          wget -q https://github.com/crarm/OpenWrt-Toolchain/releases/download/$TOOLCHAIN_TAG/$TOOLCHAIN_NAME -O /mnt/toolchain-image.img
+          wget -q $TOOLCHAIN_URL -O /mnt/toolchain-image.img
           mkdir /mnt/openwrt-ro openwrt workdir overlay
           sudo mount -o loop /mnt/toolchain-image.img /mnt/openwrt-ro
           sudo mount -t overlay overlay -o lowerdir=/mnt/openwrt-ro,upperdir=overlay,workdir=workdir openwrt
@@ -62,7 +64,7 @@ jobs:
       - name: Download Packages
         id: download
         run: |
-          mv -f config/bcm27xx/bcm2711.config $OPENWRTROOT/.config
+          mv -f $CONFIG_FILE $OPENWRTROOT/.config
           cd $OPENWRTROOT
           make defconfig
           make download -j16

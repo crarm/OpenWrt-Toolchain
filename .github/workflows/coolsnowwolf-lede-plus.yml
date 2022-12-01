@@ -154,17 +154,17 @@ jobs:
         run: |
           cd $OPENWRTROOT
           echo -e "$(nproc) thread compile tools"
-          make tools/compile -j$(nproc)
+          make tools/compile -j$(nproc) V=s
           echo -e "$(nproc) thread compile target"
-          make target/compile -j$(nproc)
+          make target/compile -j$(nproc) V=s
           make diffconfig
           echo -e "$(nproc) thread compile package"
-          make package/compile -j$(nproc)
+          make package/compile -j$(nproc) V=s
           make package/index
           echo -e "$(nproc) thread install package"
-          make package/install -j$(nproc)
+          make package/install -j$(nproc) V=s
           echo -e "$(nproc) thread install target"
-          make target/install -j$(nproc)
+          make target/install -j$(nproc) V=s
           make checksum
 
       - name : Upload artifact

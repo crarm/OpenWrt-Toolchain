@@ -147,7 +147,7 @@ jobs:
         run: |
           cd $OPENWRTROOT
           make clean
-          rm -rf tmp logs .config* dl feeds/kiddin9 package/crarm/*
+          rm -rf tmp logs .config* dl package/crarm/*
           ./scripts/feeds clean
 
       - name: Generate Toolchain Image

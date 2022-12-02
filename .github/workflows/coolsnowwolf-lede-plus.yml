@@ -78,7 +78,7 @@ jobs:
           cd openwrt
           echo "OPENWRTROOT=$PWD" >> $GITHUB_ENV
           git pull
-          #echo "src-git kiddin9 https://github.com/kiddin9/openwrt-packages.git" >> ./feeds.conf.default
+          echo "src-git kiddin9 https://github.com/kiddin9/openwrt-packages.git" >> ./feeds.conf.default
           ./scripts/feeds update -a
           rm -rf feeds/luci/themes/luci-theme-argon
           cd feeds/kiddin9
@@ -92,7 +92,7 @@ jobs:
         run: |
           git clone https://github.com/kenzok8/openwrt-packages.git kenzo
           git clone https://github.com/sirpdboy/sirpdboy-package sirpdboy
-          #mkdir package/crarm
+          mkdir package/crarm
           cp -r kenzo/luci-app-argonne-config package/crarm/luci-app-argonne-config
           cp -r kenzo/luci-app-ikoolproxy package/crarm/luci-app-ikoolproxy
           cp -r kenzo/luci-app-koolproxyR package/crarm/luci-app-koolproxyR
@@ -110,12 +110,10 @@ jobs:
           cp -r sirpdboy/luci-theme-btmod package/crarm/luci-theme-btmod
           cp -r sirpdboy/luci-theme-opentomato package/crarm/luci-theme-opentomato
           cp -r sirpdboy/luci-theme-opentomcat package/crarm/luci-theme-opentomcat
-          rm -rf package/kenzo
-          rm -rf package/sirpdboy
         
       - name: Configuration Customization - Build_x86_64
         run: |
-          [ -e $CONFIG_FILE ] && mv -f $CONFIG_FILE openwrt/.config
+          [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
           chmod +x ./customize.sh && ./customize.sh
           cd openwrt && make defconfig
           
@@ -126,15 +124,15 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
       
-      - name: make diffconfig
+      - name: make myconfig
         working-directory: ./openwrt
         run: |
           ./scripts/diffconfig.sh > myconfig
       
-      - name : Upload diffconfig
+      - name : Upload myconfig
         uses: actions/upload-artifact@master
         with:
-          name: config
+          name: myconfig
           path: openwrt/myconfig
       
       - name: Download package

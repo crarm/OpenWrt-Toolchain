@@ -95,26 +95,26 @@ jobs:
       - name: Import external feeds - sirpdboy-package...
         working-directory: ./openwrt
         run: |
-          git clone https://github.com/kenzok8/openwrt-packages.git package/kenzo
-          git clone https://github.com/sirpdboy/sirpdboy-package package/sirpdboy
+          git clone https://github.com/kenzok8/openwrt-packages.git kenzo
+          git clone https://github.com/sirpdboy/sirpdboy-package sirpdboy
           #mkdir package/crarm
-          cp -r package/kenzo/luci-app-argonne-config package/crarm/luci-app-argonne-config
-          cp -r package/kenzo/luci-app-ikoolproxy package/crarm/luci-app-ikoolproxy
-          cp -r package/kenzo/luci-app-koolproxyR package/crarm/luci-app-koolproxyR
-          cp -r package/kenzo/luci-theme-argonne package/crarm/luci-theme-argonne
-          cp -r package/kenzo/luci-theme-atmaterial_new package/crarm/luci-theme-atmaterial_new
-          cp -r package/kenzo/luci-theme-ifit package/crarm/luci-theme-ifit
-          cp -r package/kenzo/luci-theme-mcat package/crarm/luci-theme-mcat
-          cp -r package/kenzo/luci-theme-neobird package/crarm/luci-theme-neobird
-          cp -r package/kenzo/luci-theme-opentopd package/crarm/luci-theme-opentopd
-          cp -r package/kenzo/luci-theme-tomato package/crarm/luci-theme-tomato
-          cp -r package/sirpdboy/luci-app-poweroffdevice package/crarm/luci-app-poweroffdevice
-          cp -r package/sirpdboy/luci-app-rebootschedule package/crarm/luci-app-rebootschedule
-          cp -r package/sirpdboy/luci-app-switch-lan-play package/crarm/luci-app-switch-lan-play
-          cp -r package/sirpdboy/switch-lan-play package/crarm/switch-lan-play
-          cp -r package/sirpdboy/luci-theme-btmod package/crarm/luci-theme-btmod
-          cp -r package/sirpdboy/luci-theme-opentomato package/crarm/luci-theme-opentomato
-          cp -r package/sirpdboy/luci-theme-opentomcat package/crarm/luci-theme-opentomcat
+          cp -r kenzo/luci-app-argonne-config package/crarm/luci-app-argonne-config
+          cp -r kenzo/luci-app-ikoolproxy package/crarm/luci-app-ikoolproxy
+          cp -r kenzo/luci-app-koolproxyR package/crarm/luci-app-koolproxyR
+          cp -r kenzo/luci-theme-argonne package/crarm/luci-theme-argonne
+          cp -r kenzo/luci-theme-atmaterial_new package/crarm/luci-theme-atmaterial_new
+          cp -r kenzo/luci-theme-ifit package/crarm/luci-theme-ifit
+          cp -r kenzo/luci-theme-mcat package/crarm/luci-theme-mcat
+          cp -r kenzo/luci-theme-neobird package/crarm/luci-theme-neobird
+          cp -r kenzo/luci-theme-opentopd package/crarm/luci-theme-opentopd
+          cp -r kenzo/luci-theme-tomato package/crarm/luci-theme-tomato
+          cp -r sirpdboy/luci-app-poweroffdevice package/crarm/luci-app-poweroffdevice
+          cp -r sirpdboy/luci-app-rebootschedule package/crarm/luci-app-rebootschedule
+          cp -r sirpdboy/luci-app-switch-lan-play package/crarm/luci-app-switch-lan-play
+          cp -r sirpdboy/switch-lan-play package/crarm/switch-lan-play
+          cp -r sirpdboy/luci-theme-btmod package/crarm/luci-theme-btmod
+          cp -r sirpdboy/luci-theme-opentomato package/crarm/luci-theme-opentomato
+          cp -r sirpdboy/luci-theme-opentomcat package/crarm/luci-theme-opentomcat
           rm -rf package/kenzo
           rm -rf package/sirpdboy
         

@@ -84,6 +84,9 @@ jobs:
           echo "OPENWRTROOT=$PWD" >> $GITHUB_ENV
           echo "src-git kiddin9 https://github.com/kiddin9/openwrt-packages.git" >> ./feeds.conf.default
           ./scripts/feeds update -a 
+          rm -rf feeds/luci/themes/luci-theme-argon
+          cd feeds/kiddin9
+          rm -rf homeproxy luci-app-acme luci-app-aliddns luci-app-apinger luci-app-bitsrunlogin-go luci-app-keepalived luci-app-lorawan-basicstation luci-app-oscam luci-app-unblockneteasemusic luci-app-unblockneteasemusic-go
           ./scripts/feeds install -a
           ./scripts/feeds install -a
 

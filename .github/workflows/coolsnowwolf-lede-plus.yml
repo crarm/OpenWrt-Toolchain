@@ -8,13 +8,8 @@
 
 name: Coolsnowwolf/Lede Example
 on:
-  repository_dispatch:
+  #repository_dispatch:
   workflow_dispatch:
-    inputs:
-      ssh:
-        description: 'SSH connection to Actions'
-        required: false
-        default: 'true'
 #  schedule:
 #    - cron: 0 18 * * *
 #  watch:

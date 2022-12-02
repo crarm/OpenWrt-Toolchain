@@ -115,8 +115,8 @@ jobs:
           cd $OPENWRTROOT/bin/targets/*
           TARGET=$(basename `pwd`)
           echo "TARGET=$TARGET" >> $GITHUB_ENV
-          cd *
-          rm *
+          #cd *
+          #rm *
           SUBTARGET=$(basename `pwd`)
           echo "SUBTARGET=$SUBTARGET" >> $GITHUB_ENV
 

@@ -78,7 +78,6 @@ jobs:
           cd openwrt
           echo "OPENWRTROOT=$PWD" >> $GITHUB_ENV
           ./scripts/feeds update -a 
-          #rm -rf feeds/luci/themes/luci-theme-argon
           ./scripts/feeds install -a
           ./scripts/feeds install -a
 

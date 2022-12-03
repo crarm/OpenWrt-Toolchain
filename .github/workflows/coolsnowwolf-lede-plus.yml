@@ -24,7 +24,7 @@ env:
   TOOLCHAIN_TAG: coolsnowwolf-lede-master
   TOOLCHAIN_NAME: toolchain-image-coolsnowwolf-lede-master-x86-64.img
   #TOOLCHAIN_URL: https://github.com/crarm/OpenWrt-Toolchain/releases/download/$TOOLCHAIN_TAG/$TOOLCHAIN_NAME
-  CONFIG_FILE: config/x86/64.config
+  CONFIG_FILE: config/x86/64_plus.config
   TZ: Asia/Shanghai
 
 jobs:

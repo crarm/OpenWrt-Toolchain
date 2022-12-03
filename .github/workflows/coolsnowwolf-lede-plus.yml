@@ -143,7 +143,10 @@ jobs:
       - name: Download package
         working-directory: ./openwrt
         run: |
-          make download -j$(nproc)
+          #make download -j$(nproc)
+          make tools/download -j$(nproc)
+          make package/download -j$(nproc)
+          make target/download -j$(nproc)
           find dl -size -1024c -exec ls -l {} \;
           find dl -size -1024c -exec rm -f {} \;
           

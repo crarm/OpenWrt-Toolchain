@@ -6,10 +6,15 @@
 # Blog: https://p3terx.com
 #=================================================
 
-name: Coolsnowwolf/Lede Example
+name: Coolsnowwolf/Lede plus
 on:
-  #repository_dispatch:
+  repository_dispatch:
   workflow_dispatch:
+    inputs:
+      ssh:
+        description: 'SSH connection to Actions'
+        required: false
+        default: 'true'
 #  schedule:
 #    - cron: 0 18 * * *
 #  watch:
@@ -148,17 +153,17 @@ jobs:
         run: |
           cd $OPENWRTROOT
           echo  "$(nproc) thread compile tools"
-          make tools/compile -j$(nproc) V=s
+          make tools/compile -j$(nproc) || make tools/compile -j1 V=s
           echo  "$(nproc) thread compile target"
-          make target/compile -j$(nproc) V=s
+          make target/compile -j$(nproc) || make tools/compile -j1 V=s
           make diffconfig
           echo  "$(nproc) thread compile package"
-          make package/compile -j$(nproc) V=s
+          make package/compile -j$(nproc) || make tools/compile -j1 V=s
           make package/index
           echo  "$(nproc) thread install package"
-          make package/install -j$(nproc) V=s
+          make package/install -j$(nproc) || make tools/compile -j1 V=s
           echo  "$(nproc) thread install target"
-          make target/install -j$(nproc) V=s
+          make target/install -j$(nproc) || make tools/compile -j1 V=s
           make checksum
 
       - name : Upload artifact

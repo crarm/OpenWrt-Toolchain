@@ -116,7 +116,7 @@ jobs:
           TARGET=$(basename `pwd`)
           echo "TARGET=$TARGET" >> $GITHUB_ENV
           cd *
-          rm *
+          #rm *
           SUBTARGET=$(basename `pwd`)
           echo "SUBTARGET=$SUBTARGET" >> $GITHUB_ENV
 
